@@ -1,0 +1,24 @@
+#!/bin/sh
+
+root=$(cd "$(dirname "$0")/.." && pwd)/
+location="$root/tmp/vim"
+
+if [ -d "$location" ]; then
+  cd "$location" || return
+
+  ./configure \
+    --with-features=huge \
+    --with-compiledby="teoljungberg" \
+    --enable-multibyte \
+    --enable-rubyinterp \
+    --enable-python3interp \
+    --enable-cscope \
+    --enable-fontset \
+    --enable-terminal \
+    --enable-fail-if-missing \
+    --with-ruby-command=/usr/bin/ruby
+  make && make install
+else
+  echo "Could not find $location. Exiting."
+  exit 1
+fi
