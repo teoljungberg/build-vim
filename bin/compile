@@ -16,8 +16,10 @@ if [ -d "$location" ]; then
     --enable-fontset \
     --enable-terminal \
     --enable-fail-if-missing \
-    --with-ruby-command=/usr/bin/ruby
-  make && make install
+    --with-ruby-command=/usr/bin/ruby \
+    1>/dev/null 2>/dev/null
+  make 1>/dev/null 2>/dev/null
+  make install 1>/dev/null 2>/dev/null
 else
   echo "Could not find $location. Exiting."
   exit 1
