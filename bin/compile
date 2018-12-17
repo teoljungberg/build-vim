@@ -17,11 +17,11 @@ if [ -d "$location" ]; then
     --with-compiledby="teoljungberg" \
     --enable-multibyte \
     --enable-rubyinterp \
-    --enable-python3interp \
     --enable-cscope \
     --enable-fontset \
     --enable-terminal \
     --enable-fail-if-missing \
+    --disable-python3interp \
     --with-ruby-command=/usr/bin/ruby \
     1>$output 2>$output
   make 1>$output 2>$output
