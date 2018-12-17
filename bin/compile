@@ -3,6 +3,12 @@
 root=$(cd "$(dirname "$0")/.." && pwd)/
 location="$root/tmp/vim"
 
+if [ -n "$DEBUG" ]; then
+  output="/dev/tty"
+else
+  output="/dev/null"
+fi
+
 if [ -d "$location" ]; then
   cd "$location" || return
 
@@ -17,9 +23,9 @@ if [ -d "$location" ]; then
     --enable-terminal \
     --enable-fail-if-missing \
     --with-ruby-command=/usr/bin/ruby \
-    1>/dev/null 2>/dev/null
-  make 1>/dev/null 2>/dev/null
-  make install 1>/dev/null 2>/dev/null
+    1>$output 2>$output
+  make 1>$output 2>$output
+  make install 1>$output 2>$output
 else
   echo "Could not find $location. Exiting."
   exit 1
