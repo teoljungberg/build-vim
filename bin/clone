@@ -22,7 +22,7 @@ if [ -d "$location" ]; then
   echo "Updating vim/vim"
   git -C "$location" fetch --quiet origin
   display_new_commits "$location"
-  git -C "$location" rebase --quiet origin/master
+  git -C "$location" rebase --quiet origin/master > /dev/null
 else
   echo "Cloning vim/vim"
   git clone --quiet git://github.com/vim/vim "$location"
