@@ -2,6 +2,12 @@
 
 ## Usage
 
+The list of available commands:
+
+```sh
+% make help
+```
+
 ```sh
 % make install
 ```
