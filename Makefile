@@ -17,3 +17,6 @@ lint: ## Lint all shell scripts.
 
 install: ## Clone and compile.
 install: clone compile
+
+update: ## Same as `make clone`.
+update: clone
