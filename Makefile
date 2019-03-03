@@ -1,19 +1,19 @@
 .DEFAULT_GOAL := help
 
+clean: ## Remove checked out version of `vim(1)`.
+	rm -rf tmp/vim
+
 clone: ## Checkout `vim(1)` locally.
 	@bin/clone
 
 compile: ## Configure and compile `vim(1)`.
 	@bin/compile
 
-install: ## Clone and compile.
-install: clone compile
-
-clean: ## Remove checked out version of `vim(1)`.
-	rm -rf tmp/vim
+help: ## Display this help.
+	@grep -E "^[a-zA-Z_-]+:.*?##.*$$" $(MAKEFILE_LIST) | grep -v grep | sed 's/## //'
 
 lint: ## Lint all shell scripts.
 	@bin/lint
 
-help: ## Display this help.
-	@grep -E "^[a-zA-Z_-]+:.*?##.*$$" $(MAKEFILE_LIST) | grep -v grep | sed 's/## //'
+install: ## Clone and compile.
+install: clone compile
