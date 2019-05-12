@@ -19,6 +19,7 @@ if [ -d "$location" ]; then
     --enable-multibyte \
     --enable-python3interp \
     --enable-rubyinterp \
+    --enable-python3interp \
     --enable-terminal \
     --with-compiledby="teoljungberg" \
     --with-features=huge \
