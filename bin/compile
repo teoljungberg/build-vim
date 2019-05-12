@@ -13,15 +13,15 @@ if [ -d "$location" ]; then
   cd "$location" || return
 
   ./configure \
-    --with-features=huge \
-    --with-compiledby="teoljungberg" \
+    --disable-python3interp \
+    --enable-cscope \
+    --enable-fail-if-missing \
+    --enable-fontset \
     --enable-multibyte \
     --enable-rubyinterp \
-    --enable-cscope \
-    --enable-fontset \
     --enable-terminal \
-    --enable-fail-if-missing \
-    --disable-python3interp \
+    --with-compiledby="teoljungberg" \
+    --with-features=huge \
     --with-ruby-command=/usr/bin/ruby \
     1>$output 2>$output
   make 1>$output 2>$output
