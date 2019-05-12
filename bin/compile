@@ -13,11 +13,11 @@ if [ -d "$location" ]; then
   cd "$location" || return
 
   ./configure \
-    --disable-python3interp \
     --enable-cscope \
     --enable-fail-if-missing \
     --enable-fontset \
     --enable-multibyte \
+    --enable-python3interp \
     --enable-rubyinterp \
     --enable-terminal \
     --with-compiledby="teoljungberg" \
