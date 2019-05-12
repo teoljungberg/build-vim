@@ -4,16 +4,16 @@ clean: ## Remove checked out version of `vim(1)`.
 	rm -rf tmp/vim
 
 clone: ## Checkout `vim(1)` locally.
-	@bin/clone
+	@ bin/clone
 
 compile: ## Configure and compile `vim(1)`.
-	@bin/compile
+	@ bin/compile
 
 help: ## Display this help.
-	@grep -E "^[a-zA-Z_-]+:.*?##.*$$" $(MAKEFILE_LIST) | grep -v grep | sed 's/## //'
+	@ grep -E "^[a-zA-Z_-]+:.*?##.*$$" $(MAKEFILE_LIST) | grep -v grep | sed 's/## //'
 
 lint: ## Lint all shell scripts.
-	@bin/lint
+	@ bin/lint
 
 install: ## Clone and compile.
 install: clone compile
