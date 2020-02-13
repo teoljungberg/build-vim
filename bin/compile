@@ -23,7 +23,6 @@ if [ -d "$location" ]; then
     --enable-terminal \
     --with-compiledby="teoljungberg" \
     --with-features=huge \
-    --with-python3-config-dir=/usr/local/opt/python/Frameworks/Python.framework/Versions/3.7/include/python3.7m/ \
     --with-ruby-command=/usr/bin/ruby \
     1>$output 2>$output
   make 1>$output 2>$output
