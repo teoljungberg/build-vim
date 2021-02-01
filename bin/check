@@ -11,4 +11,3 @@ ensure_command_exists() {
 
 ensure_command_exists "git"
 ensure_command_exists "ruby"
-ensure_command_exists "python3"
