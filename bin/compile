@@ -10,7 +10,7 @@ else
 fi
 
 if [ -d "$location" ]; then
-  cd "$location" || return
+  cd "$location" || exit 1
 
   ./configure \
     --enable-cscope \
