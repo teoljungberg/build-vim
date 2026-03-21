@@ -39,8 +39,7 @@ build-vim: check-vim clone-vim
 build-nvim: ## Configure and build `nvim(1)` without installing.
 build-nvim: check-nvim clone-nvim
 	@ cd $(NVIM_DIR) && \
-	  cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$(PREFIX) 1>$(OUTPUT) 2>$(OUTPUT) && \
-	  cmake --build build 1>$(OUTPUT) 2>$(OUTPUT)
+	  $(MAKE) CMAKE_BUILD_TYPE=Release CMAKE_INSTALL_PREFIX=$(PREFIX) 1>$(OUTPUT) 2>$(OUTPUT)
 
 .PHONY: check-vim
 check-vim: ## Ensure the system can build `vim(1)`.
@@ -51,7 +50,6 @@ check-vim: ## Ensure the system can build `vim(1)`.
 check-nvim: ## Ensure the system can build `nvim(1)`.
 	@ command -v git >/dev/null 2>&1 || { echo >&2 "The command \`git\` does not exist."; exit 1; }
 	@ command -v cmake >/dev/null 2>&1 || { echo >&2 "The command \`cmake\` does not exist."; exit 1; }
-	@ pkg-config --exists tree-sitter 2>/dev/null || { echo >&2 "The library \`tree-sitter\` is not installed."; exit 1; }
 
 .PHONY: clean
 clean: ## Remove checked out sources.
@@ -99,4 +97,4 @@ install-vim: build-vim
 .PHONY: install-nvim
 install-nvim: ## Clone, build, and install `nvim(1)`.
 install-nvim: build-nvim
-	@ cd $(NVIM_DIR) && cmake --install build 1>$(OUTPUT) 2>$(OUTPUT)
+	@ cd $(NVIM_DIR) && $(MAKE) install CMAKE_INSTALL_PREFIX=$(PREFIX) 1>$(OUTPUT) 2>$(OUTPUT)
