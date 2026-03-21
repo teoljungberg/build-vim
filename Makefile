@@ -1,6 +1,10 @@
 .DEFAULT_GOAL := help
 
-check: ## Ensures that the system can compile `vim(1)`.
+build: ## Configure and build `vim(1)` without installing.
+build: check clone
+	@ bin/build
+
+check: ## Ensures that the system can build `vim(1)`.
 	@ bin/check
 
 clean: ## Remove checked out version of `vim(1)`.
@@ -10,18 +14,15 @@ clone: ## Checkout `vim(1)` locally.
 clone: check
 	@ bin/clone
 
-compile: ## Configure and compile `vim(1)`.
-compile: check
-	@ bin/compile
-
 help: ## Display this help.
 	@ grep -E "^[a-zA-Z_-]+:.*?##.*$$" $(MAKEFILE_LIST) | grep -v grep | sed 's/## //'
 
 lint: ## Lint all shell scripts.
 	@ bin/lint
 
-install: ## Clone and compile.
-install: check clone compile
+install: ## Clone, build, and install `vim(1)`.
+install: build
+	@ bin/install
 
 update: ## Same as `make install`.
 update: install
