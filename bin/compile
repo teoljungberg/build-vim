@@ -22,9 +22,9 @@ if [ -d "$location" ]; then
     --with-compiledby="teoljungberg" \
     --with-features=huge \
     --with-ruby-command=/usr/bin/ruby \
-    1>$output 2>$output
-  make 1>$output 2>$output
-  make install 1>$output 2>$output
+    1>"$output" 2>"$output"
+  make 1>"$output" 2>"$output"
+  make install 1>"$output" 2>"$output"
 else
   echo "Could not find $location. Exiting."
   exit 1
