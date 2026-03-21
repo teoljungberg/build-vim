@@ -81,11 +81,11 @@ clone-nvim: check-nvim
 	    echo "Updating $(NVIM_URL)"; \
 	    git -C $(NVIM_DIR) fetch --quiet origin; \
 	    current=$$(git -C $(NVIM_DIR) rev-parse --short HEAD); \
-	    new=$$(git -C $(NVIM_DIR) rev-parse --short origin/main); \
+	    new=$$(git -C $(NVIM_DIR) rev-parse --short origin/master); \
 	    if [ "$$current" != "$$new" ]; then \
 	      echo "$(NVIM_URL)/compare/$$current...$$new"; \
 	    fi; \
-	    git -C "$(NVIM_DIR)" rebase --quiet origin/main >"$(OUTPUT)" 2>&1; \
+	    git -C "$(NVIM_DIR)" rebase --quiet origin/master >"$(OUTPUT)" 2>&1; \
 	  else \
 	    echo "Cloning $(NVIM_URL)"; \
 	    git clone --quiet $(NVIM_URL) $(NVIM_DIR); \
