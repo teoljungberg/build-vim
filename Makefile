@@ -7,6 +7,7 @@ else
   OUTPUT := /dev/null
 endif
 
+PREFIX := $(HOME)/.local
 VIM_DIR := tmp/vim
 VIM_URL := https://github.com/vim/vim
 NVIM_DIR := tmp/neovim
@@ -21,6 +22,7 @@ build-vim: ## Configure and build `vim(1)` without installing.
 build-vim: check-vim clone-vim
 	@ cd $(VIM_DIR) && \
 	  ./configure \
+	    --prefix=$(PREFIX) \
 	    --enable-cscope \
 	    --enable-fail-if-missing \
 	    --enable-fontset \
@@ -37,7 +39,7 @@ build-vim: check-vim clone-vim
 build-nvim: ## Configure and build `nvim(1)` without installing.
 build-nvim: check-nvim clone-nvim
 	@ cd $(NVIM_DIR) && \
-	  cmake -S . -B build -DCMAKE_BUILD_TYPE=Release 1>$(OUTPUT) 2>$(OUTPUT) && \
+	  cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$(PREFIX) 1>$(OUTPUT) 2>$(OUTPUT) && \
 	  cmake --build build 1>$(OUTPUT) 2>$(OUTPUT)
 
 .PHONY: check-vim
