@@ -9,9 +9,10 @@ The list of available commands:
 ```
 
 ```sh
-% make install
+% make install-vim
+% make install-nvim
 ```
 
 ### Debug
 
-Pass `DEBUG=1` to `make(1)` to see the output while compiling `vim(1)`.
+Pass `DEBUG=1` to `make(1)` to see the output while building.

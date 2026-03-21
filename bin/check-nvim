@@ -1,0 +1,18 @@
+#!/bin/sh
+
+set -e
+
+ensure_command_exists() {
+  command -v "$1" >/dev/null 2>&1 || {
+    echo >&2 "The command \`$1\` does not exist."
+    exit 1
+  }
+}
+
+ensure_command_exists "git"
+ensure_command_exists "cmake"
+
+pkg-config --exists tree-sitter 2>/dev/null || {
+  echo >&2 "The library \`tree-sitter\` is not installed."
+  exit 1
+}

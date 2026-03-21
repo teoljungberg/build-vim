@@ -1,0 +1,20 @@
+#!/bin/sh
+
+root=$(cd "$(dirname "$0")/.." && pwd)/
+location="$root/tmp/neovim"
+
+if [ -n "$DEBUG" ]; then
+  output="/dev/tty"
+else
+  output="/dev/null"
+fi
+
+if [ -d "$location" ]; then
+  cd "$location" || exit 1
+
+  cmake --install build \
+    1>"$output" 2>"$output"
+else
+  echo "Could not find $location. Exiting."
+  exit 1
+fi

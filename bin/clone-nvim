@@ -1,0 +1,24 @@
+#!/bin/sh
+
+display_new_commits() {
+  work_tree_path="$1"
+  current="$(git -C "$work_tree_path" rev-parse --short HEAD)"
+  new="$(git -C "$work_tree_path" rev-parse --short origin/master)"
+
+  if [ "$current" != "$new" ]; then
+    echo "https://github.com/neovim/neovim/compare/$current...$new"
+  fi
+}
+
+root=$(cd "$(dirname "$0")/.." && pwd)/
+location="$root/tmp/neovim"
+
+if [ -d "$location" ]; then
+  echo "Updating neovim/neovim"
+  git -C "$location" fetch --quiet origin
+  display_new_commits "$location"
+  git -C "$location" rebase --quiet origin/master > /dev/null
+else
+  echo "Cloning neovim/neovim"
+  git clone --quiet https://github.com/neovim/neovim "$location"
+fi
