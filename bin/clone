@@ -20,5 +20,5 @@ if [ -d "$location" ]; then
   git -C "$location" rebase --quiet origin/master > /dev/null
 else
   echo "Cloning vim/vim"
-  git clone --quiet git://github.com/vim/vim "$location"
+  git clone --quiet https://github.com/vim/vim "$location"
 fi
