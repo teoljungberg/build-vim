@@ -23,14 +23,17 @@ build-vim: check-vim clone-vim
 	@ cd $(VIM_DIR) && \
 	  ./configure \
 	    --prefix=$(PREFIX) \
+	    --enable-autoservername \
 	    --enable-cscope \
 	    --enable-fail-if-missing \
 	    --enable-fontset \
 	    --enable-multibyte \
+	    --enable-python3interp=dynamic \
 	    --enable-rubyinterp \
 	    --enable-terminal \
 	    --with-compiledby="teoljungberg" \
 	    --with-features=huge \
+	    --with-python3-command=/usr/bin/python3 \
 	    --with-ruby-command=/usr/bin/ruby \
 	    1>$(OUTPUT) 2>$(OUTPUT) && \
 	  $(MAKE) 1>$(OUTPUT) 2>$(OUTPUT)
