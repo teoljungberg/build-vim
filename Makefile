@@ -55,6 +55,16 @@ check-nvim: ## Ensure the system can build `nvim(1)`.
 clean: ## Remove checked out sources.
 	@ rm -rf $(VIM_DIR) $(NVIM_DIR)
 
+.PHONY: distclean-vim
+distclean-vim: ## Remove `vim(1)` build caches without re-cloning.
+	@ if [ -d $(VIM_DIR) ] && [ -f $(VIM_DIR)/src/auto/config.cache ]; then \
+	    cd $(VIM_DIR) && $(MAKE) distclean 1>$(OUTPUT) 2>$(OUTPUT); \
+	  fi
+
+.PHONY: distclean-nvim
+distclean-nvim: ## Remove `nvim(1)` build caches without re-cloning.
+	@ rm -rf $(NVIM_DIR)/build $(NVIM_DIR)/.deps
+
 .PHONY: clone-vim
 clone-vim: ## Checkout `vim(1)` locally.
 clone-vim: check-vim
