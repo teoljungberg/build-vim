@@ -7,7 +7,7 @@ else
   OUTPUT := /dev/null
 endif
 
-PREFIX := $(HOME)/.local
+PREFIX ?= $(HOME)/.local
 VIM_DIR := tmp/vim
 VIM_URL := https://github.com/vim/vim
 NVIM_DIR := tmp/neovim
