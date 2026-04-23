@@ -107,11 +107,11 @@ update-vim: clone-vim
 	@ echo "Updating $(VIM_URL)"
 	@ git -C $(VIM_DIR) fetch --quiet origin
 	@ current=$$(git -C $(VIM_DIR) rev-parse --short HEAD); \
-	  new=$$(git -C $(VIM_DIR) rev-parse --short origin/master); \
+	  new=$$(git -C $(VIM_DIR) rev-parse --short origin/HEAD); \
 	  if [ "$$current" != "$$new" ]; then \
 	    echo "$(VIM_URL)/compare/$$current...$$new"; \
 	  fi
-	@ git -C "$(VIM_DIR)" rebase --quiet origin/master >"$(OUTPUT)" 2>&1
+	@ git -C "$(VIM_DIR)" rebase --quiet origin/HEAD >"$(OUTPUT)" 2>&1
 
 .PHONY: update-nvim
 update-nvim: ## Force-update the `nvim(1)` checkout.
@@ -119,11 +119,11 @@ update-nvim: clone-nvim
 	@ echo "Updating $(NVIM_URL)"
 	@ git -C $(NVIM_DIR) fetch --quiet origin
 	@ current=$$(git -C $(NVIM_DIR) rev-parse --short HEAD); \
-	  new=$$(git -C $(NVIM_DIR) rev-parse --short origin/master); \
+	  new=$$(git -C $(NVIM_DIR) rev-parse --short origin/HEAD); \
 	  if [ "$$current" != "$$new" ]; then \
 	    echo "$(NVIM_URL)/compare/$$current...$$new"; \
 	  fi
-	@ git -C "$(NVIM_DIR)" rebase --quiet origin/master >"$(OUTPUT)" 2>&1
+	@ git -C "$(NVIM_DIR)" rebase --quiet origin/HEAD >"$(OUTPUT)" 2>&1
 
 .PHONY: install-vim
 install-vim: ## Clone, build, and install `vim(1)`.
