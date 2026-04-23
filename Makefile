@@ -16,7 +16,7 @@ NVIM_URL := https://github.com/neovim/neovim
 
 .PHONY: help
 help: ## Display this help.
-	@ grep -E '^[a-zA-Z_-]+:.*?##.*$$' $(MAKEFILE_LIST) | grep -v grep | sed 's/## //'
+	@ grep -E '^[a-zA-Z_-]+:.*?##.*$$' $(MAKEFILE_LIST) | sed 's/.*## //'
 
 .PHONY: build-vim
 build-vim: ## Configure and build `vim(1)` without installing.
