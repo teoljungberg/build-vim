@@ -36,14 +36,14 @@ build-vim: check-vim clone-vim
 	    --with-features=huge \
 	    --with-python3-command=/usr/bin/python3 \
 	    --with-ruby-command=/usr/bin/ruby \
-	    1>$(OUTPUT) 2>$(OUTPUT) && \
-	  $(MAKE) 1>$(OUTPUT) 2>$(OUTPUT)
+	    >$(OUTPUT) 2>&1 && \
+	  $(MAKE) >$(OUTPUT) 2>&1
 
 .PHONY: build-nvim
 build-nvim: ## Configure and build `nvim(1)` without installing.
 build-nvim: check-nvim clone-nvim
 	@ cd $(NVIM_DIR) && \
-	  $(MAKE) CMAKE_BUILD_TYPE=Release CMAKE_INSTALL_PREFIX=$(PREFIX) 1>$(OUTPUT) 2>$(OUTPUT)
+	  $(MAKE) CMAKE_BUILD_TYPE=Release CMAKE_INSTALL_PREFIX=$(PREFIX) >$(OUTPUT) 2>&1
 
 .PHONY: check-vim
 check-vim: ## Ensure the system can build `vim(1)`.
@@ -62,7 +62,7 @@ clean: ## Remove checked out sources.
 .PHONY: distclean-vim
 distclean-vim: ## Remove `vim(1)` build caches without re-cloning.
 	@ if [ -d $(VIM_DIR) ] && [ -f $(VIM_DIR)/src/auto/config.cache ]; then \
-	    cd $(VIM_DIR) && $(MAKE) distclean 1>$(OUTPUT) 2>$(OUTPUT); \
+	    cd $(VIM_DIR) && $(MAKE) distclean >$(OUTPUT) 2>&1; \
 	  fi
 
 .PHONY: distclean-nvim
@@ -128,9 +128,9 @@ update-nvim: clone-nvim
 .PHONY: install-vim
 install-vim: ## Clone, build, and install `vim(1)`.
 install-vim: should-update-vim build-vim
-	@ cd $(VIM_DIR) && $(MAKE) install 1>$(OUTPUT) 2>$(OUTPUT)
+	@ cd $(VIM_DIR) && $(MAKE) install >$(OUTPUT) 2>&1
 
 .PHONY: install-nvim
 install-nvim: ## Clone, build, and install `nvim(1)`.
 install-nvim: should-update-nvim build-nvim
-	@ cd $(NVIM_DIR) && $(MAKE) install CMAKE_INSTALL_PREFIX=$(PREFIX) 1>$(OUTPUT) 2>$(OUTPUT)
+	@ cd $(NVIM_DIR) && $(MAKE) install CMAKE_INSTALL_PREFIX=$(PREFIX) >$(OUTPUT) 2>&1
