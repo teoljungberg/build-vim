@@ -21,9 +21,9 @@ help: ## Display this help.
 .PHONY: build-vim
 build-vim: ## Configure and build `vim(1)` without installing.
 build-vim: check-vim clone-vim
-	@ cd $(VIM_DIR) && \
+	@ cd "$(VIM_DIR)" && \
 	  ./configure \
-	    --prefix=$(PREFIX) \
+	    --prefix="$(PREFIX)" \
 	    --enable-autoservername \
 	    --enable-cscope \
 	    --enable-fail-if-missing \
@@ -42,8 +42,8 @@ build-vim: check-vim clone-vim
 .PHONY: build-nvim
 build-nvim: ## Configure and build `nvim(1)` without installing.
 build-nvim: check-nvim clone-nvim
-	@ cd $(NVIM_DIR) && \
-	  $(MAKE) CMAKE_BUILD_TYPE=Release CMAKE_INSTALL_PREFIX=$(PREFIX) >$(OUTPUT) 2>&1
+	@ cd "$(NVIM_DIR)" && \
+	  $(MAKE) CMAKE_BUILD_TYPE=Release CMAKE_INSTALL_PREFIX="$(PREFIX)" >$(OUTPUT) 2>&1
 
 .PHONY: check-vim
 check-vim: ## Ensure the system can build `vim(1)`.
@@ -57,21 +57,21 @@ check-nvim: ## Ensure the system can build `nvim(1)`.
 
 .PHONY: clean
 clean: ## Remove checked out sources.
-	@ rm -rf $(VIM_DIR) $(NVIM_DIR)
+	@ rm -rf "$(VIM_DIR)" "$(NVIM_DIR)"
 
 .PHONY: distclean-vim
 distclean-vim: ## Remove `vim(1)` build caches without re-cloning.
-	@ if [ -d $(VIM_DIR) ] && [ -f $(VIM_DIR)/src/auto/config.cache ]; then \
-	    cd $(VIM_DIR) && $(MAKE) distclean >$(OUTPUT) 2>&1; \
+	@ if [ -d "$(VIM_DIR)" ] && [ -f "$(VIM_DIR)/src/auto/config.cache" ]; then \
+	    cd "$(VIM_DIR)" && $(MAKE) distclean >$(OUTPUT) 2>&1; \
 	  fi
 
 .PHONY: distclean-nvim
 distclean-nvim: ## Remove `nvim(1)` build caches without re-cloning.
-	@ rm -rf $(NVIM_DIR)/build $(NVIM_DIR)/.deps
+	@ rm -rf "$(NVIM_DIR)/build" "$(NVIM_DIR)/.deps"
 
 $(VIM_DIR): | check-vim
 	@ echo "Cloning $(VIM_URL)"
-	@ git clone --quiet $(VIM_URL) $(VIM_DIR)
+	@ git clone --quiet $(VIM_URL) "$(VIM_DIR)"
 
 .PHONY: clone-vim
 clone-vim: ## Checkout `vim(1)` locally if missing.
@@ -79,7 +79,7 @@ clone-vim: $(VIM_DIR)
 
 $(NVIM_DIR): | check-nvim
 	@ echo "Cloning $(NVIM_URL)"
-	@ git clone --quiet $(NVIM_URL) $(NVIM_DIR)
+	@ git clone --quiet $(NVIM_URL) "$(NVIM_DIR)"
 
 .PHONY: clone-nvim
 clone-nvim: ## Checkout `nvim(1)` locally if missing.
@@ -88,7 +88,7 @@ clone-nvim: $(NVIM_DIR)
 .PHONY: should-update-vim
 should-update-vim: ## Update `vim(1)` if the checkout is stale.
 should-update-vim: clone-vim
-	@ last=$$(git -C $(VIM_DIR) log -1 --format=%ct 2>/dev/null || echo 0); \
+	@ last=$$(git -C "$(VIM_DIR)" log -1 --format=%ct 2>/dev/null || echo 0); \
 	  if [ $$(( $$(date +%s) - last )) -gt $$(($(UPDATE_MAX_AGE_MIN) * 60)) ]; then \
 	    $(MAKE) update-vim; \
 	  fi
@@ -96,7 +96,7 @@ should-update-vim: clone-vim
 .PHONY: should-update-nvim
 should-update-nvim: ## Update `nvim(1)` if the checkout is stale.
 should-update-nvim: clone-nvim
-	@ last=$$(git -C $(NVIM_DIR) log -1 --format=%ct 2>/dev/null || echo 0); \
+	@ last=$$(git -C "$(NVIM_DIR)" log -1 --format=%ct 2>/dev/null || echo 0); \
 	  if [ $$(( $$(date +%s) - last )) -gt $$(($(UPDATE_MAX_AGE_MIN) * 60)) ]; then \
 	    $(MAKE) update-nvim; \
 	  fi
@@ -105,9 +105,9 @@ should-update-nvim: clone-nvim
 update-vim: ## Force-update the `vim(1)` checkout.
 update-vim: clone-vim
 	@ echo "Updating $(VIM_URL)"
-	@ git -C $(VIM_DIR) fetch --quiet origin
-	@ current=$$(git -C $(VIM_DIR) rev-parse --short HEAD); \
-	  new=$$(git -C $(VIM_DIR) rev-parse --short origin/HEAD); \
+	@ git -C "$(VIM_DIR)" fetch --quiet origin
+	@ current=$$(git -C "$(VIM_DIR)" rev-parse --short HEAD); \
+	  new=$$(git -C "$(VIM_DIR)" rev-parse --short origin/HEAD); \
 	  if [ "$$current" != "$$new" ]; then \
 	    echo "$(VIM_URL)/compare/$$current...$$new"; \
 	  fi
@@ -117,9 +117,9 @@ update-vim: clone-vim
 update-nvim: ## Force-update the `nvim(1)` checkout.
 update-nvim: clone-nvim
 	@ echo "Updating $(NVIM_URL)"
-	@ git -C $(NVIM_DIR) fetch --quiet origin
-	@ current=$$(git -C $(NVIM_DIR) rev-parse --short HEAD); \
-	  new=$$(git -C $(NVIM_DIR) rev-parse --short origin/HEAD); \
+	@ git -C "$(NVIM_DIR)" fetch --quiet origin
+	@ current=$$(git -C "$(NVIM_DIR)" rev-parse --short HEAD); \
+	  new=$$(git -C "$(NVIM_DIR)" rev-parse --short origin/HEAD); \
 	  if [ "$$current" != "$$new" ]; then \
 	    echo "$(NVIM_URL)/compare/$$current...$$new"; \
 	  fi
@@ -128,9 +128,9 @@ update-nvim: clone-nvim
 .PHONY: install-vim
 install-vim: ## Clone, build, and install `vim(1)`.
 install-vim: should-update-vim build-vim
-	@ cd $(VIM_DIR) && $(MAKE) install >$(OUTPUT) 2>&1
+	@ cd "$(VIM_DIR)" && $(MAKE) install >$(OUTPUT) 2>&1
 
 .PHONY: install-nvim
 install-nvim: ## Clone, build, and install `nvim(1)`.
 install-nvim: should-update-nvim build-nvim
-	@ cd $(NVIM_DIR) && $(MAKE) install CMAKE_INSTALL_PREFIX=$(PREFIX) >$(OUTPUT) 2>&1
+	@ cd "$(NVIM_DIR)" && $(MAKE) install CMAKE_INSTALL_PREFIX="$(PREFIX)" >$(OUTPUT) 2>&1
