@@ -8,6 +8,7 @@ else
 endif
 
 PREFIX ?= $(HOME)/.local
+UPDATE_MAX_AGE_MIN ?= 360 # == 6h
 VIM_DIR := tmp/vim
 VIM_URL := https://github.com/vim/vim
 NVIM_DIR := tmp/neovim
@@ -84,6 +85,22 @@ $(NVIM_DIR): | check-nvim
 clone-nvim: ## Checkout `nvim(1)` locally if missing.
 clone-nvim: $(NVIM_DIR)
 
+.PHONY: should-update-vim
+should-update-vim: ## Update `vim(1)` if the checkout is stale.
+should-update-vim: clone-vim
+	@ last=$$(git -C $(VIM_DIR) log -1 --format=%ct 2>/dev/null || echo 0); \
+	  if [ $$(( $$(date +%s) - last )) -gt $$(($(UPDATE_MAX_AGE_MIN) * 60)) ]; then \
+	    $(MAKE) update-vim; \
+	  fi
+
+.PHONY: should-update-nvim
+should-update-nvim: ## Update `nvim(1)` if the checkout is stale.
+should-update-nvim: clone-nvim
+	@ last=$$(git -C $(NVIM_DIR) log -1 --format=%ct 2>/dev/null || echo 0); \
+	  if [ $$(( $$(date +%s) - last )) -gt $$(($(UPDATE_MAX_AGE_MIN) * 60)) ]; then \
+	    $(MAKE) update-nvim; \
+	  fi
+
 .PHONY: update-vim
 update-vim: ## Force-update the `vim(1)` checkout.
 update-vim: clone-vim
@@ -110,10 +127,10 @@ update-nvim: clone-nvim
 
 .PHONY: install-vim
 install-vim: ## Clone, build, and install `vim(1)`.
-install-vim: build-vim
+install-vim: should-update-vim build-vim
 	@ cd $(VIM_DIR) && $(MAKE) install 1>$(OUTPUT) 2>$(OUTPUT)
 
 .PHONY: install-nvim
 install-nvim: ## Clone, build, and install `nvim(1)`.
-install-nvim: build-nvim
+install-nvim: should-update-nvim build-nvim
 	@ cd $(NVIM_DIR) && $(MAKE) install CMAKE_INSTALL_PREFIX=$(PREFIX) 1>$(OUTPUT) 2>$(OUTPUT)
