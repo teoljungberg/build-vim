@@ -68,39 +68,45 @@ distclean-vim: ## Remove `vim(1)` build caches without re-cloning.
 distclean-nvim: ## Remove `nvim(1)` build caches without re-cloning.
 	@ rm -rf $(NVIM_DIR)/build $(NVIM_DIR)/.deps
 
+$(VIM_DIR): | check-vim
+	@ echo "Cloning $(VIM_URL)"
+	@ git clone --quiet $(VIM_URL) $(VIM_DIR)
+
 .PHONY: clone-vim
-clone-vim: ## Checkout `vim(1)` locally.
-clone-vim: check-vim
-	@ if [ -d $(VIM_DIR) ]; then \
-	    echo "Updating $(VIM_URL)"; \
-	    git -C $(VIM_DIR) fetch --quiet origin; \
-	    current=$$(git -C $(VIM_DIR) rev-parse --short HEAD); \
-	    new=$$(git -C $(VIM_DIR) rev-parse --short origin/master); \
-	    if [ "$$current" != "$$new" ]; then \
-	      echo "$(VIM_URL)/compare/$$current...$$new"; \
-	    fi; \
-	    git -C "$(VIM_DIR)" rebase --quiet origin/master >"$(OUTPUT)" 2>&1; \
-	  else \
-	    echo "Cloning $(VIM_URL)"; \
-	    git clone --quiet $(VIM_URL) $(VIM_DIR); \
-	  fi
+clone-vim: ## Checkout `vim(1)` locally if missing.
+clone-vim: $(VIM_DIR)
+
+$(NVIM_DIR): | check-nvim
+	@ echo "Cloning $(NVIM_URL)"
+	@ git clone --quiet $(NVIM_URL) $(NVIM_DIR)
 
 .PHONY: clone-nvim
-clone-nvim: ## Checkout `nvim(1)` locally.
-clone-nvim: check-nvim
-	@ if [ -d $(NVIM_DIR) ]; then \
-	    echo "Updating $(NVIM_URL)"; \
-	    git -C $(NVIM_DIR) fetch --quiet origin; \
-	    current=$$(git -C $(NVIM_DIR) rev-parse --short HEAD); \
-	    new=$$(git -C $(NVIM_DIR) rev-parse --short origin/master); \
-	    if [ "$$current" != "$$new" ]; then \
-	      echo "$(NVIM_URL)/compare/$$current...$$new"; \
-	    fi; \
-	    git -C "$(NVIM_DIR)" rebase --quiet origin/master >"$(OUTPUT)" 2>&1; \
-	  else \
-	    echo "Cloning $(NVIM_URL)"; \
-	    git clone --quiet $(NVIM_URL) $(NVIM_DIR); \
+clone-nvim: ## Checkout `nvim(1)` locally if missing.
+clone-nvim: $(NVIM_DIR)
+
+.PHONY: update-vim
+update-vim: ## Force-update the `vim(1)` checkout.
+update-vim: clone-vim
+	@ echo "Updating $(VIM_URL)"
+	@ git -C $(VIM_DIR) fetch --quiet origin
+	@ current=$$(git -C $(VIM_DIR) rev-parse --short HEAD); \
+	  new=$$(git -C $(VIM_DIR) rev-parse --short origin/master); \
+	  if [ "$$current" != "$$new" ]; then \
+	    echo "$(VIM_URL)/compare/$$current...$$new"; \
 	  fi
+	@ git -C "$(VIM_DIR)" rebase --quiet origin/master >"$(OUTPUT)" 2>&1
+
+.PHONY: update-nvim
+update-nvim: ## Force-update the `nvim(1)` checkout.
+update-nvim: clone-nvim
+	@ echo "Updating $(NVIM_URL)"
+	@ git -C $(NVIM_DIR) fetch --quiet origin
+	@ current=$$(git -C $(NVIM_DIR) rev-parse --short HEAD); \
+	  new=$$(git -C $(NVIM_DIR) rev-parse --short origin/master); \
+	  if [ "$$current" != "$$new" ]; then \
+	    echo "$(NVIM_URL)/compare/$$current...$$new"; \
+	  fi
+	@ git -C "$(NVIM_DIR)" rebase --quiet origin/master >"$(OUTPUT)" 2>&1
 
 .PHONY: install-vim
 install-vim: ## Clone, build, and install `vim(1)`.
