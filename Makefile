@@ -49,11 +49,14 @@ build-nvim: check-nvim clone-nvim
 .PHONY: check-vim
 check-vim: ## Ensure the system can build `vim(1)`.
 	@ command -v git >/dev/null 2>&1 || { echo >&2 "The command \`git\` does not exist."; exit 1; }
-	@ command -v ruby >/dev/null 2>&1 || { echo >&2 "The command \`ruby\` does not exist."; exit 1; }
+	@ test -x /usr/bin/python3 || { echo >&2 "The command \`/usr/bin/python3\` does not exist."; exit 1; }
+	@ test -x /usr/bin/ruby || { echo >&2 "The command \`/usr/bin/ruby\` does not exist."; exit 1; }
+	@ command -v cscope >/dev/null 2>&1 || { echo >&2 "The command \`cscope\` does not exist."; exit 1; }
 
 .PHONY: check-nvim
 check-nvim: ## Ensure the system can build `nvim(1)`.
 	@ command -v git >/dev/null 2>&1 || { echo >&2 "The command \`git\` does not exist."; exit 1; }
+	@ command -v cc >/dev/null 2>&1 || { echo >&2 "The command \`cc\` does not exist."; exit 1; }
 	@ command -v cmake >/dev/null 2>&1 || { echo >&2 "The command \`cmake\` does not exist."; exit 1; }
 
 .PHONY: clean
