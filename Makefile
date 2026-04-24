@@ -9,6 +9,7 @@ endif
 
 PREFIX ?= $(HOME)/.local
 UPDATE_MAX_AGE_MIN ?= 360 # == 6h
+FRESH = find "$(1)" -mmin -$(UPDATE_MAX_AGE_MIN) 2>/dev/null | grep -q .
 VIM_DIR := tmp/vim
 VIM_URL := https://github.com/vim/vim
 NVIM_DIR := tmp/neovim
@@ -88,18 +89,12 @@ clone-nvim: $(NVIM_DIR)
 .PHONY: should-update-vim
 should-update-vim: ## Update `vim(1)` if the checkout is stale.
 should-update-vim: clone-vim
-	@ last=$$(git -C "$(VIM_DIR)" log -1 --format=%ct 2>/dev/null || echo 0); \
-	  if [ $$(( $$(date +%s) - last )) -gt $$(($(UPDATE_MAX_AGE_MIN) * 60)) ]; then \
-	    $(MAKE) update-vim; \
-	  fi
+	@ $(call FRESH,$(VIM_DIR)/.git/FETCH_HEAD) || $(MAKE) update-vim
 
 .PHONY: should-update-nvim
 should-update-nvim: ## Update `nvim(1)` if the checkout is stale.
 should-update-nvim: clone-nvim
-	@ last=$$(git -C "$(NVIM_DIR)" log -1 --format=%ct 2>/dev/null || echo 0); \
-	  if [ $$(( $$(date +%s) - last )) -gt $$(($(UPDATE_MAX_AGE_MIN) * 60)) ]; then \
-	    $(MAKE) update-nvim; \
-	  fi
+	@ $(call FRESH,$(NVIM_DIR)/.git/FETCH_HEAD) || $(MAKE) update-nvim
 
 .PHONY: update-vim
 update-vim: ## Force-update the `vim(1)` checkout.
